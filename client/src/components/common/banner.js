@@ -1,6 +1,7 @@
 import React from 'react';
-import "../../styles/banner.css";
-// import LinkOrButton from "../../helpers/linkOrButton";
+
+import "../css/banner.css";
+
 
 const Banner = () => {
   return (

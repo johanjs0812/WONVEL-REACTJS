@@ -1,10 +1,80 @@
 import React from 'react';
-import "../../styles/explore-section.css";
-// import LinkOrButton from "../../helpers/linkOrButton";
+// import "../css/explore-section.css";
+
+const Style = () => {
+    return (
+      <style>
+        {`
+.container{
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 48px;
+}
+
+.titlle-section{
+  color: #2d4271;
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.contai-items{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item{
+  width: 20%;
+}
+
+.explore-tour__item__image {
+  width: 255px;
+  overflow: hidden;
+}
+
+.explore-tour__item__image img{
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.position-relative{
+  position: relative;
+}
+
+.position-absolute{
+  position: absolute;
+}
+
+.card-img-overlay{
+  bottom: 0;
+  padding: 1rem;
+  background: linear-gradient(180deg, rgba(45, 66, 113, 0), #2d4271);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.card-title {
+  line-height: 1.25 !important;
+  margin-bottom: .5rem;
+  font-size: 20px;
+}
+
+.card-title a {
+  color: #fff;
+}
+
+        `}
+      </style>
+    );
+};
 
 const ExploreSection = () => {
+    
     return (
         <> 
+     <Style />
 
         <div className="container">
             <h2 className="titlle-section">

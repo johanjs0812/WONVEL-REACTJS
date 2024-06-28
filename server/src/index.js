@@ -12,7 +12,7 @@ const invoicesRouter = require('./routes/invoices')
 const connectToDb = require('./util/mysql').connectToDb;
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4200;
 
 connectToDb()
   .then(function() {
@@ -22,7 +22,7 @@ connectToDb()
     console.log('Error: ' + err.message);
   });
 
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
