@@ -1,5 +1,6 @@
 const { sequelize } = require('../util/mysql'); // Import sequelize từ mysql.js
 const Sequelize = require('sequelize');
+const { Op, fn, col, literal } = require('sequelize');
 
 const tours = sequelize.define('tours', {
     tour_name: Sequelize.STRING,
@@ -37,6 +38,67 @@ class TourTable {
                 discount_price: {
                     [Sequelize.Op.ne]: null
                 }
+            }
+        });
+    }
+
+    // Phương thức lấy các tour theo transportation
+    getToursByTransportation(transportationValue) {
+        return this.tours.findAll({
+            where: {
+                transportation: transportationValue
+            }
+        });
+    }
+
+    // Phương thức lấy các tour theo start date
+    getToursByStartDate(date) {
+        return this.tours.findAll({
+            where: {
+                start_date: date
+            }
+        });
+    }
+
+    // Phương thức lấy các tour theo departure location
+    getToursByDepartureLocation(location) {
+        return this.tours.findAll({
+            where: {
+                departure_location: location
+            }
+        });
+    }
+
+    // Phương thức lấy các tour theo price range
+    getToursByPriceRange(minPrice, maxPrice) {
+        return this.tours.findAll({
+            where: {
+                price: {
+                    [Sequelize.Op.between]: [minPrice, maxPrice]
+                }
+            }
+        });
+    }
+
+    // Phương thức lấy các tour theo khoảng cách ngày
+    getToursByDateRange(minDays, maxDays) {
+        let whereCondition;
+        if (maxDays !== null) {
+            whereCondition = literal(`DATEDIFF(end_date, start_date) BETWEEN ${minDays} AND ${maxDays}`);
+        } else {
+            whereCondition = literal(`DATEDIFF(end_date, start_date) > ${minDays}`);
+        }
+
+        return this.tours.findAll({
+            where: whereCondition
+        });
+    }
+
+    // Phương thức lấy nhiều dữ liệu theo id
+    getDestination(id) {
+        return this.tours.findAll({
+            where: {
+                destination_id: id
             }
         });
     }

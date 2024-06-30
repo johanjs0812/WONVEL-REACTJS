@@ -22,6 +22,15 @@ class DestinationTable {
     getById(id) {
         return this.table.findByPk(id);
     }
+
+    // Phương thức lấy tất cả theo provinces
+    getProvinces(location) {
+        return this.table.findAll({
+            where: {
+                provinces: location
+            }
+        });
+    }
 }
 
 // Tạo một thể hiện của lớp TourTable
