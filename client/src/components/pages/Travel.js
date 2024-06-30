@@ -1,11 +1,5 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import {  } from "@mui/x-date-pickers/Da";
 
 import useApi from '../../hooks/toursApi';
 import { TOUR_GET_ALL_DATA } from "../../constants/apiConfig";
@@ -13,10 +7,17 @@ import { TOUR_GET_ALL_DATA } from "../../constants/apiConfig";
 import formatCurrency from '../../helpers/formatVnd';
 import formatDate from '../../helpers/formatTime';
 import calculateDaysBetweenDates from '../../helpers/DayBetweensDates';
-// import { formatDateBefor } from "../../helpers/formatDataPicker";
 
 import { tinh } from "../../constants/provinces";
 import { buttons1, buttons2 } from "../../constants/buttonFilter";
+
+import OderByFilter from '../common/oderbyFilter';
+import StartLocationFilter from '../common/startlocationFilter';
+import GoLocationFilter from '../common/golocationFilter';
+import TimeDayTravelFilter from '../common/timedaytravelFilter';
+import DayStartFilter from '../common/daystartFilter';
+import TranspostionFilter from '../common/transpotionFilter';
+import BudgeFilter from '../common/budgetFilter';
 
 const Style = () => {
   return (
@@ -722,89 +723,27 @@ h1.heading-1{
   );
 };
 
-const MaterialDatePicker = () => {
-  
-  const [selectedDate, setSelectedDate] = useState(dayjs().startOf('day'));
-
-
-  const handleDateChange = (newDate) => {
-    if (newDate) {
-      setSelectedDate(newDate);
-    }
-  };
+const Travel = () => {
+  const { data, loading } = useApi(TOUR_GET_ALL_DATA);
+  const [tours, setTours] = useState([]);
 
   useEffect(() => {
-    console.log('Selected date has been updated:', selectedDate);
-  }, [selectedDate]);
-
-  const DateCss = () => {
-    return (
-      <style> 
-      { `
-        .MuiFormControl-root.MuiTextField-root.css-z3c6am-MuiFormControl-root-MuiTextField-root
-        {
-        //  visibility:hidden;
-        }
-  
-        .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputAdornedEnd.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
-          padding: 0px;
-  
-        }
-  
-        .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
-        padding: 0px;
-        }
-  
-        .MuiInputAdornment-root.MuiInputAdornment-positionEnd.MuiInputAdornment-outlined.MuiInputAdornment-sizeMedium.css-1laqsz7-MuiInputAdornment-root{
-        display:none;
-        }
-  
-        .MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
-          display:none;
-        }
-  
-  
-  
-      `}
-  
-      </style>
-    )
-  }
-
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      < DateCss />
-      <DatePicker
-        value={selectedDate} 
-        onChange={handleDateChange}
-        format="DD/MM/YYYY"
-      />
-    </LocalizationProvider>
-  );
-
-}
-
-const Travel = () => {
-
-  const { data, loading } = useApi(`${TOUR_GET_ALL_DATA}`);
+    if (data) {
+      setTours(data);
+    }
+  }, [data]);
 
   if (loading) {
-    return console.log('dang tai');
+    return <p>Loading...</p>;
   }
 
-  const tours = data;
-
-  const DateButton = () =>{
-    const btn = document.querySelector("button.MuiButtonBase-root");
-    if (btn) {
-      btn.click();
-    }
+  if (!tours || tours.length === 0) {
+    return <p>No tours available.</p>;
   }
 
   return (
     <>
   < Style/>
-  
     <div className="tour-search">
 
       <div className="container">
@@ -827,10 +766,12 @@ const Travel = () => {
           <div className="left-bar">
 
             <div className="sidebar-inner">
+
               <div>
                 <div className="tour-search-result__filter__brand">
                   <h2 className="font-weight-bold">Bộ lọc tìm kiếm</h2>
                 </div>
+
                 <div className="location-container">
                   <div>
                     <div className="tour-search-result__filter__heading">
@@ -839,134 +780,28 @@ const Travel = () => {
 
                     <div className="pt-2" style={{ paddingTop: '16px' }}>
 
-                      <div className="start-to-stop">
+                      < GoLocationFilter tinh={tinh} />
 
-                        <h5 className="point-start-title s-title">Điểm đi</h5>
+                      < StartLocationFilter tinh={tinh} />
 
-                        <div className="css-b62m3t-container" style={{ position: 'relative' }}>
-                          <div className="css-13cymwt-control" style={{ cursor: 'pointer' }}>
-                            <div className="css-hlgwow">
-                              <div className="css-1dimb5e-singleValue">Tất cả</div>
-                              <div className="css-19bb58m">
-                                <input className="" id="react-select-6-input" 
-                                style={{ color: 'inherit', background: '0px center', opacity: 0, width: '100%', gridArea: '1 / 2', font: 'inherit', minWidth: '2px', border: '0px', margin: '0px', outline: '0px', padding: '0px' }} />
-                              </div>
-                            </div>
-                            <div className="css-1wy0on6">
-                              <div className="css-1xc3v61-indicatorContainer">
-                                <i className='bx bx-chevron-down'></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="box-select-loaction-go">
-                            <div className="option-local">Tất cả</div>
-                            {tinh.map((destination, index) => (
-                              <div key={index} className="option-local">{destination}</div>
-                            ))}
-                          </div>
-                        </div>
+                      < TimeDayTravelFilter buttons1={buttons1} />
 
-                      </div>
+                      < DayStartFilter />
 
-                      <div className="start-to-stop">
-                        <h5 className="point-start-title s-title">Điểm đến</h5>
+                      <br />
 
-                        <div className="css-b62m3t-container" style={{ position: 'relative' }}>
-                          <div className="css-13cymwt-control" style={{ cursor: 'pointer' }}>
-                            <div className="css-hlgwow">
-                              <div className="css-1dimb5e-singleValue">Tất cả</div>
-                              <div className="css-19bb58m">
-                                <input className="" id="react-select-6-input" style={{ color: 'inherit', background: '0px center', opacity: 0, width: '100%', gridArea: '1 / 2', font: 'inherit', minWidth: '2px', border: '0px', margin: '0px', outline: '0px', padding: '0px' }} />
-                              </div>
-                            </div>
-                            <div className="css-1wy0on6">
-                              <div className="css-1xc3v61-indicatorContainer">
-                                <i className='bx bx-chevron-down'></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="box-select-loaction-go">
-                            <div className="option-local">Tất cả</div>
-                            {tinh.map((province, index) => (
-                              <div key={index} className="option-local">{province}</div>
-                            ))}
-                          </div>
-                        </div>
+                      < TranspostionFilter buttons2={buttons2} />
 
-                      </div>
-
-                      <div className="tour-search-result__filter__block">
-                        <h5 className="s-title">Số ngày</h5>
-
-                        <div className="btn-group tour-search-result__filter__room" style={{ width: '100%' }}>
-                          <div className="row" style={{ margin: '0', width: '100%' }}>
-                            {buttons1.map((button, index) => (
-                              <div key={index} className="col-6" style={{ backgroundColor: 'rgb(255, 255, 255)', color: 'rgb(33, 37, 41)' }}>
-                                <button style={{ cursor: 'pointer' }} className='btn-stitll'>
-                                  {button}
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <div className="tour-search-result__filter__block">
-                        <h5 className="date-go-to-back-title s-title">Ngày đi</h5>
-
-                        <div className="datepciker-wrap" style={{cursor:"pointer"}} onClick={DateButton}>
-                          <i className='bx bxs-calendar-week'></i>
-                          <div className="calendarWrap bg-transparent" style={{ overflow: 'hidden' }}>
-
-                            <div className='MaterialDataPicker' >
-                              < MaterialDatePicker/>
-                            </div>
-                            
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <div className="tour-search-result__filter__block" style={{ marginBottom: '0 !important' }}>
-                        <h5 className="s-title" > Thông tin vận chuyển </h5>
-
-                        <div className="btn-group tour-search-result__filter__room" style={{ width: '100%' }}>
-                          <div className="row" style={{ margin: '0', width: '100%' }}>
-                            {buttons2.map((button, index) => (
-                              <div key={index} className="col-6" style={{ backgroundColor: 'rgb(255, 255, 255)', color: 'rgb(33, 37, 41)' }}>
-                                <button style={{ cursor: 'pointer' }} className="btn-stitll">
-                                  {button}
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                    </div>
-
-                    <br />
-
-                    <h5 className="s-title">Ngân sách của Quý khách</h5>
-                    <div className="ranger-price giatien" style={{ marginBottom: '0' }}>
-
-                      <div style={{ display: 'flex', alignItems: 'center', columnGap: '20px' }}>
-                        <div className="btn-price">
-                          <input type="number" placeholder="Từ" />
-                        </div>
-                        <div>-</div>
-                        <div className="btn-price">
-                          <input type="text" placeholder="Đến"  />
-                        </div>
-                        <div className="box-btn-se" >
-                          <button>Tìm</button>
-                        </div>
-                      </div>
+                      < BudgeFilter/>
 
                     </div>
+
                   </div>
+
                 </div>
+
               </div>
-            </div>
+
             </div>
 
             <div className="right-bar">
@@ -980,20 +815,7 @@ const Travel = () => {
               </div>
 
               <div>
-                <div className="order-by">
-                  <div className="order-by-title">Chúng tôi tìm thấy <strong>{tours.length}</strong> tours cho Quý khách.</div>
-                  <div className="order-by-left">
-                    <div className="order-wrap">
-                      <span>Sắp xếp theo</span>
-                      <select className="form-control dropdown Filter" id="sllOrder" name="sllOrder" style={{ outline: 'none' }}>
-                        <option>--- Chọn ---</option>
-                        <option>Theo giá thấp -&gt; cao</option>
-                        <option>Theo giá cao -&gt; thấp</option>
-                        <option>Giảm giá nhiều nhất</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+                < OderByFilter x={tours} />
               </div>
 
               <div className="contai-product" style={{ flexWrap: 'wrap', rowGap: '25px' }}>
