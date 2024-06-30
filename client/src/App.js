@@ -18,8 +18,7 @@ function App() {
           
           <Route path="/home" element={<Home />} />
           <Route path="/travel" element={<Travel />} />
-          <Route path="/detail" element={<Detail />} />
-
+          <Route path="/detail/:id" element={<Detail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/singup" element={<Singup />} />
           <Route path="/inforpm" element={<InformationPayment />} />

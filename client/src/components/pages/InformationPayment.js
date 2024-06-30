@@ -1135,7 +1135,7 @@ button, input, optgroup, select, textarea {
   color: #fff;
   content: "✓";
   display: none;
-  font-family: Font Awesome\ 5 Pro;
+  font-family: Font Awesome 5 Pro;
   font-size: 18px;
   position: absolute;
 }

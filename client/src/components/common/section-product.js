@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import useApi from '../../hooks/toursApi';
 
 import { TOUR_DISCOUNTING_PRICE } from "../../constants/apiConfig";
+import formatCurrency from '../../helpers/formatVnd';
+import calculateDiscountPercentage from '../../helpers/DiscountPercentage';
+import formatDate from '../../helpers/formatTime';
+
 
 const Style = () => {
   return (
@@ -200,10 +204,12 @@ const ProductSection = () => {
     return console.log('dang tai');
   }
 
+  console.log(data)
+
   return (
     <>
      <div className="container">
-      <h2 className="title-section">Tour đang giảm giá hot</h2>
+      <h2 className="title-section" style={{fontSize: "30px"}}>Tour đang giảm giá hot</h2>
       <div className="contai-product">
 
         {tour.map(tour => (
@@ -216,14 +222,16 @@ const ProductSection = () => {
                   </Link>
                 </div>
               </div>
-              <div className="box-center">
-                <p className="p-1">{`${tour.start_date} - ${tour.timeday}`}</p>
+              <div className="box-center" style={{paddingBottom: "0px"}}>
+                <p className="p-1">{`${formatDate(tour.start_date)} - ${formatDate(tour.end_date)}`}</p>
                 <p className="p-2">
                   <Link to={`/detail/${tour.id}`}>
                     {tour.tour_name}
                   </Link>
                 </p>
-                <div className="p-3" style={{ padding: "0px !important" }}>
+                <br></br>
+
+                <div className="p-3">
                   <div>Mã tour:</div>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <i className='bx bxs-coupon'></i>
@@ -231,17 +239,18 @@ const ProductSection = () => {
                   </div>
                 </div>
               </div>
-              <p className="box-bot padding-1rem">
+
+              <p className="box-bot padding-1rem" style={{margin: "0px", paddingTop: "0px"}}>
                 Nơi khởi hành: {tour.departure_location}
               </p>
               <div className="box-last padding-1rem">
                 <div className="tour-item__price__wrapper">
                   <div className="tour-item__price--old">
-                    Giá <span className="tour-item__price--old__number">{tour.price}</span>
+                    Giá <span className="tour-item__price--old__number">{formatCurrency(tour.price)}</span>
                   </div>
                   <div className="tour-item__price--current">
-                    <span className="tour-item__price--current__number pe-2 mb-0">{tour.discount_price}</span>
-                    <span className="tour-item__price--current__discount small p-1">{tour.discount_percentage}% GIẢM</span>
+                    <span className="tour-item__price--current__number pe-2 mb-0">{formatCurrency(tour.discount_price)}</span>
+                    <span className="tour-item__price--current__discount small p-1">GIẢM {calculateDiscountPercentage(tour.price, tour.discount_price)}</span>
                   </div>
                   <Link className="tour-item__price__timer py-2" to={`/inforpm/${tour.id}`} style={{width: "100%", display: "block"}}>
                     <span>Đặt ngay</span>

@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Link } from 'react-router-dom';
 
-// import "../css/travel.css";
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import {  } from "@mui/x-date-pickers/Da";
+
+import useApi from '../../hooks/toursApi';
+import { TOUR_GET_ALL_DATA } from "../../constants/apiConfig";
+
+import formatCurrency from '../../helpers/formatVnd';
+import formatDate from '../../helpers/formatTime';
+import calculateDaysBetweenDates from '../../helpers/DayBetweensDates';
+// import { formatDateBefor } from "../../helpers/formatDataPicker";
+
+import { tinh } from "../../constants/provinces";
+import { buttons1, buttons2 } from "../../constants/buttonFilter";
 
 const Style = () => {
   return (
@@ -707,54 +722,89 @@ h1.heading-1{
   );
 };
 
-const Travel = ( { formatVndDate, Duration, formatPrice, provinces, buttons, buttons2 }) => {
+const MaterialDatePicker = () => {
+  
+  const [selectedDate, setSelectedDate] = useState(dayjs().startOf('day'));
 
-  const tours = [];
 
+  const handleDateChange = (newDate) => {
+    if (newDate) {
+      setSelectedDate(newDate);
+    }
+  };
 
-  // const [selectedProvince, setSelectedProvince] = useState(null);
-  // const [selectedProvince2, setSelectedProvince2] = useState(null);
-  // const [displayStyle, setDisplayStyle] = useState('none');
-  // const [displayStyle2, setDisplayStyle2] = useState('none');
-  // const [selectedButton, setSelectedButton] = useState(null);
-  // const [selectedButton2, setSelectedButton2] = useState(null);
+  useEffect(() => {
+    console.log('Selected date has been updated:', selectedDate);
+  }, [selectedDate]);
 
-  // const fromInput = useRef(null);
-  // const toInput = useRef(null);
+  const DateCss = () => {
+    return (
+      <style> 
+      { `
+        .MuiFormControl-root.MuiTextField-root.css-z3c6am-MuiFormControl-root-MuiTextField-root
+        {
+        //  visibility:hidden;
+        }
+  
+        .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputAdornedEnd.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input{
+          padding: 0px;
+  
+        }
+  
+        .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+        padding: 0px;
+        }
+  
+        .MuiInputAdornment-root.MuiInputAdornment-positionEnd.MuiInputAdornment-outlined.MuiInputAdornment-sizeMedium.css-1laqsz7-MuiInputAdornment-root{
+        display:none;
+        }
+  
+        .MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+          display:none;
+        }
+  
+  
+  
+      `}
+  
+      </style>
+    )
+  }
 
-  // const toggleDisplayStyle = (province, event) => {
-  //   setSelectedProvince(province);
-  //   setDisplayStyle(displayStyle === 'none' ? 'block' : 'none');
-  // };
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      < DateCss />
+      <DatePicker
+        value={selectedDate} 
+        onChange={handleDateChange}
+        format="DD/MM/YYYY"
+      />
+    </LocalizationProvider>
+  );
 
-  // const toggleDisplayStyle2 = (province, event) => {
-  //   setSelectedProvince2(province);
-  //   setDisplayStyle2(displayStyle2 === 'none' ? 'block' : 'none');
-  // };
+}
 
-  // const updateFilter = (filterType, value) => {
-  //   // Implement filter logic here
-  // };
+const Travel = () => {
 
-  // const selectButton = (index) => {
-  //   setSelectedButton(index);
-  // };
+  const { data, loading } = useApi(`${TOUR_GET_ALL_DATA}`);
 
-  // const selectButton2 = (index) => {
-  //   setSelectedButton2(index);
-  // };
+  if (loading) {
+    return console.log('dang tai');
+  }
 
-  // const onDateChange = (event) => {
-  //   // Implement date change logic here
-  // };
+  const tours = data;
 
-  // const clickPrice = (fromValue, toValue) => {
-  //   // Implement price click logic here
-  // };
+  const DateButton = () =>{
+    const btn = document.querySelector("button.MuiButtonBase-root");
+    if (btn) {
+      btn.click();
+    }
+  }
 
   return (
     <>
   < Style/>
+  
     <div className="tour-search">
 
       <div className="container">
@@ -793,12 +843,13 @@ const Travel = ( { formatVndDate, Duration, formatPrice, provinces, buttons, but
 
                         <h5 className="point-start-title s-title">Điểm đi</h5>
 
-                        {/* <div className="css-b62m3t-container" style={{ position: 'relative' }}>
-                          <div className="css-13cymwt-control" style={{ cursor: 'pointer' }} onClick={(event) => toggleDisplayStyle2(selectedProvince2, event)}>
+                        <div className="css-b62m3t-container" style={{ position: 'relative' }}>
+                          <div className="css-13cymwt-control" style={{ cursor: 'pointer' }}>
                             <div className="css-hlgwow">
-                              <div className="css-1dimb5e-singleValue">{selectedProvince2 || 'Tất cả'}</div>
+                              <div className="css-1dimb5e-singleValue">Tất cả</div>
                               <div className="css-19bb58m">
-                                <input className="" id="react-select-6-input" value="" style={{ color: 'inherit', background: '0px center', opacity: 0, width: '100%', gridArea: '1 / 2', font: 'inherit', minWidth: '2px', border: '0px', margin: '0px', outline: '0px', padding: '0px' }} />
+                                <input className="" id="react-select-6-input" 
+                                style={{ color: 'inherit', background: '0px center', opacity: 0, width: '100%', gridArea: '1 / 2', font: 'inherit', minWidth: '2px', border: '0px', margin: '0px', outline: '0px', padding: '0px' }} />
                               </div>
                             </div>
                             <div className="css-1wy0on6">
@@ -807,25 +858,25 @@ const Travel = ( { formatVndDate, Duration, formatPrice, provinces, buttons, but
                               </div>
                             </div>
                           </div>
-                          <div className="box-select-loaction-go" style={{ display: displayStyle2 }}>
-                            <div className="option-local" onClick={(event) => { toggleDisplayStyle2('Tất cả', event); updateFilter('startFilter', undefined); }}>Tất cả</div>
-                            {provinces.map((province, index) => (
-                              <div key={index} className="option-local" onClick={(event) => { toggleDisplayStyle2(province, event); updateFilter('startFilter', province); }}>{province}</div>
+                          <div className="box-select-loaction-go">
+                            <div className="option-local">Tất cả</div>
+                            {tinh.map((destination, index) => (
+                              <div key={index} className="option-local">{destination}</div>
                             ))}
                           </div>
-                        </div> */}
+                        </div>
 
                       </div>
 
                       <div className="start-to-stop">
                         <h5 className="point-start-title s-title">Điểm đến</h5>
 
-                        {/* <div className="css-b62m3t-container" style={{ position: 'relative' }}>
-                          <div className="css-13cymwt-control" style={{ cursor: 'pointer' }} onClick={(event) => toggleDisplayStyle(selectedProvince, event)}>
+                        <div className="css-b62m3t-container" style={{ position: 'relative' }}>
+                          <div className="css-13cymwt-control" style={{ cursor: 'pointer' }}>
                             <div className="css-hlgwow">
-                              <div className="css-1dimb5e-singleValue">{selectedProvince || 'Tất cả'}</div>
+                              <div className="css-1dimb5e-singleValue">Tất cả</div>
                               <div className="css-19bb58m">
-                                <input className="" id="react-select-6-input" value="" style={{ color: 'inherit', background: '0px center', opacity: 0, width: '100%', gridArea: '1 / 2', font: 'inherit', minWidth: '2px', border: '0px', margin: '0px', outline: '0px', padding: '0px' }} />
+                                <input className="" id="react-select-6-input" style={{ color: 'inherit', background: '0px center', opacity: 0, width: '100%', gridArea: '1 / 2', font: 'inherit', minWidth: '2px', border: '0px', margin: '0px', outline: '0px', padding: '0px' }} />
                               </div>
                             </div>
                             <div className="css-1wy0on6">
@@ -834,63 +885,63 @@ const Travel = ( { formatVndDate, Duration, formatPrice, provinces, buttons, but
                               </div>
                             </div>
                           </div>
-                          <div className="box-select-loaction-go" style={{ display: displayStyle }}>
-                            <div className="option-local" onClick={(event) => { toggleDisplayStyle('Tất cả', event); updateFilter('endFilter', undefined); }}>Tất cả</div>
-                            {provinces.map((province, index) => (
-                              <div key={index} className="option-local" onClick={(event) => { toggleDisplayStyle(province, event); updateFilter('endFilter', province); }}>{province}</div>
+                          <div className="box-select-loaction-go">
+                            <div className="option-local">Tất cả</div>
+                            {tinh.map((province, index) => (
+                              <div key={index} className="option-local">{province}</div>
                             ))}
                           </div>
-                        </div> */}
+                        </div>
 
                       </div>
 
                       <div className="tour-search-result__filter__block">
                         <h5 className="s-title">Số ngày</h5>
 
-                        {/* <div className="btn-group tour-search-result__filter__room" style={{ width: '100%' }}>
+                        <div className="btn-group tour-search-result__filter__room" style={{ width: '100%' }}>
                           <div className="row" style={{ margin: '0', width: '100%' }}>
-                            {buttons.map((button, index) => (
+                            {buttons1.map((button, index) => (
                               <div key={index} className="col-6" style={{ backgroundColor: 'rgb(255, 255, 255)', color: 'rgb(33, 37, 41)' }}>
-                                <button style={{ cursor: 'pointer' }} className={`btn-stitll ${selectedButton === index ? 'active' : ''}`} onClick={() => { selectButton(index); updateFilter('dayFilter', button); }}>
+                                <button style={{ cursor: 'pointer' }} className='btn-stitll'>
                                   {button}
                                 </button>
                               </div>
                             ))}
                           </div>
-                        </div> */}
+                        </div>
 
                       </div>
 
                       <div className="tour-search-result__filter__block">
                         <h5 className="date-go-to-back-title s-title">Ngày đi</h5>
 
-                        {/* <div className="datepciker-wrap" onClick={() => picker.open()}>
+                        <div className="datepciker-wrap" style={{cursor:"pointer"}} onClick={DateButton}>
                           <i className='bx bxs-calendar-week'></i>
                           <div className="calendarWrap bg-transparent" style={{ overflow: 'hidden' }}>
-                            <input value={valueDate} className="form-control input-date input-noborder bg-transparent" id="date-range-hotel" style={{ outline: 'none' }} />
-                            <mat-form-field>
-                              <input matInput ref={dateInput} className="form-control input-date input-noborder bg-transparent" id="date-range-hotel" style={{ outline: 'none' }} onChange={(event) => onDateChange(event)} />
-                              <mat-datepicker ref={picker}></mat-datepicker>
-                            </mat-form-field>
+
+                            <div className='MaterialDataPicker' >
+                              < MaterialDatePicker/>
+                            </div>
+                            
                           </div>
-                        </div> */}
+                        </div>
 
                       </div>
 
                       <div className="tour-search-result__filter__block" style={{ marginBottom: '0 !important' }}>
                         <h5 className="s-title" > Thông tin vận chuyển </h5>
 
-                        {/* <div className="btn-group tour-search-result__filter__room" style={{ width: '100%' }}>
+                        <div className="btn-group tour-search-result__filter__room" style={{ width: '100%' }}>
                           <div className="row" style={{ margin: '0', width: '100%' }}>
                             {buttons2.map((button, index) => (
                               <div key={index} className="col-6" style={{ backgroundColor: 'rgb(255, 255, 255)', color: 'rgb(33, 37, 41)' }}>
-                                <button style={{ cursor: 'pointer' }} className={`btn-stitll ${selectedButton2 === index ? 'active' : ''}`} onClick={() => { selectButton2(index); updateFilter('vehicleFilter', button); }}>
+                                <button style={{ cursor: 'pointer' }} className="btn-stitll">
                                   {button}
                                 </button>
                               </div>
                             ))}
                           </div>
-                        </div> */}
+                        </div>
                     </div>
 
                     <br />
@@ -898,18 +949,18 @@ const Travel = ( { formatVndDate, Duration, formatPrice, provinces, buttons, but
                     <h5 className="s-title">Ngân sách của Quý khách</h5>
                     <div className="ranger-price giatien" style={{ marginBottom: '0' }}>
 
-                      {/* <div style={{ display: 'flex', alignItems: 'center', columnGap: '20px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', columnGap: '20px' }}>
                         <div className="btn-price">
-                          <input type="number" placeholder="Từ" ref={fromInput} />
+                          <input type="number" placeholder="Từ" />
                         </div>
                         <div>-</div>
                         <div className="btn-price">
-                          <input type="text" placeholder="Đến" ref={toInput} />
+                          <input type="text" placeholder="Đến"  />
                         </div>
-                        <div className="box-btn-se" onClick={() => clickPrice(fromInput.value, toInput.value)}>
+                        <div className="box-btn-se" >
                           <button>Tìm</button>
                         </div>
-                      </div> */}
+                      </div>
 
                     </div>
                   </div>
@@ -958,7 +1009,7 @@ const Travel = ( { formatVndDate, Duration, formatPrice, provinces, buttons, but
                         </div>
                       </div>
                       <div className="box-center pad-rs">
-                        <p className="p-1">{formatVndDate(tour.start_date)} - {Duration(tour.start_date, tour.end_date)}</p>
+                        <p className="p-1">{formatDate(tour.start_date)} - {calculateDaysBetweenDates(tour.start_date, tour.end_date)}</p>
                         <p className="p-2">
                           <Link to={`/detail/${tour.id}`}>
                             {tour.tour_name}
@@ -978,12 +1029,12 @@ const Travel = ( { formatVndDate, Duration, formatPrice, provinces, buttons, but
                       <div className="box-last padding-1rem pad-rs ">
                         <div className="tour-item__price__wrapper">
                           <div className="tour-item__price--old" style={{ visibility: tour.discount_price ? 'visible' : 'hidden' }}>
-                            Giá <span className="tour-item__price--old__number">{formatPrice(tour.price)}</span>
+                            Giá <span className="tour-item__price--old__number">{formatCurrency(tour.price)}</span>
                           </div>
                           <div className="tour-item__price--current">
-                            <span className="tour-item__price--current__number pe-2 mb-0">{formatPrice(tour.discount_price ?? tour.price)}</span>
-                            <span className="tour-item__price--current__discount small p-1">
-                              <Link to={`/detail/${tour.id}`}>Xem chi tiết</Link>
+                            <span className="tour-item__price--current__number pe-2 mb-0">{formatCurrency(tour.discount_price ?? tour.price)}</span>
+                            <span className="tour-item__price--current__discount small p-1" >
+                              <Link to={`/detail/${tour.id}`} style={{color: "white"}}>Xem chi tiết</Link>
                             </span>
                           </div>
                           <div className="tour-item__price__timer py-2">

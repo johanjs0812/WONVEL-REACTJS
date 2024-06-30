@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-// import "../css/provinces-section.css";
+import {destinations} from '../../constants/provinces';
 
 const Style = () => {
   return (
@@ -94,10 +93,6 @@ img{
 
 const ProvincesSection = () => {
 
-  const destinations = [
-
-  ]
-
   return (
     <>
     <Style />
@@ -121,14 +116,14 @@ const ProvincesSection = () => {
                         width: '100%'
                       }}
                       src={destination.img}
-                      alt={destination.ten} // Alt attribute for accessibility
+                      alt={destination.ten} 
                       className="card-img-top img-fluid"
                     />
                   </Link>
                 </div>
-                <div className="card-body">
+                <div className="card-body" style={{ padding: "10px"}}>
                   <h3 className="card-title destination-item__title">
-                    <Link>{destination.ten}</Link>
+                    <Link style={{color: "#2d4271"}}>{destination.ten}</Link>
                   </h3>
                   <p className="card-text destination-item__description">
                     Đã có {destination.luotThamQuan} lượt khách
