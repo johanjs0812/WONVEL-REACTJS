@@ -4,9 +4,9 @@ import formatDate from '../../helpers/formatTime';
 import calculateDaysBetweenDates from '../../helpers/DayBetweensDates';
 
 const ToursList = ({tours}) => {
+
     return(
         <>
-        
         <div className="contai-product" style={{ flexWrap: 'wrap', rowGap: '25px' }}>
 
             {tours.map((tour) => (
@@ -58,7 +58,6 @@ const ToursList = ({tours}) => {
             ))}
 
         </div>
-
         </>
     )
 }

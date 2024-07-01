@@ -1,23 +1,35 @@
 import React, { useState, useEffect  } from 'react';
+import { TOUR_GET_START_DATE } from "../../constants/apiConfig";
+import { formatDateFT } from "../../helpers/formatDataPicker";
 
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-const MaterialDatePicker = () => {
+const MaterialDatePicker = ({FILTER, name, onClick, choose, owner}) => {
   
     const [selectedDate, setSelectedDate] = useState(dayjs().startOf('day'));
-  
+
+    useEffect(() => {
+      if (owner === name) {
+        setSelectedDate(choose);
+      }
+    }, [owner, name, choose]);
+
     const handleDateChange = (newDate) => {
       if (newDate) {
+
+        // console.log('jp',newDate.$d);
+
+        const date = formatDateFT(newDate.$d);
+        console.log(newDate.$d, date)
+        FILTER(`${TOUR_GET_START_DATE}${date}`);
+
         setSelectedDate(newDate);
+        onClick(newDate, name);
       }
     };
-  
-    useEffect(() => {
-      console.log('Selected date has been updated:', selectedDate);
-    }, [selectedDate]);
   
     const DateCss = () => {
       return (

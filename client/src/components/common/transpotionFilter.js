@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { TOUR_GET_TRANSPORTATION} from "../../constants/apiConfig";
 
-const TranspostionFilter = ({ buttons2 }) => {
+const TranspostionFilter = ({ buttons2, FILTER, name, onClick, choose, owner }) => {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const handleButtonClick = (index) => {
+  useEffect(() => {
+    if (owner === name) {
+      setActiveIndex(choose);
+    }
+  }, [owner, name, choose]);
+  
+  const handleButtonClick = (index, button) => {
+    FILTER(`${TOUR_GET_TRANSPORTATION}${button}`);
     setActiveIndex(index);
+    onClick(index, name);
   };
 
   return (
@@ -23,7 +32,7 @@ const TranspostionFilter = ({ buttons2 }) => {
                 <button
                   style={{ cursor: 'pointer' }}
                   className={`btn-stitll ${activeIndex === index ? 'active' : ''}`}
-                  onClick={() => handleButtonClick(index)}
+                  onClick={() => handleButtonClick(index, button)}
                 >
                   {button}
                 </button>

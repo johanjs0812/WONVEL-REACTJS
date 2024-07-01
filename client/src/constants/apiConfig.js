@@ -9,5 +9,5 @@ export const TOUR_GET_TRANSPORTATION = `${LOCALHOST}/api/v1/tours/filter/trans/`
 export const TOUR_GET_DATE_RANGE = `${LOCALHOST}/api/v1/tours/filter/date_range/`;
 export const TOUR_GET_PRICE_RANGE = `${LOCALHOST}/api/v1/tours/filter/price_range/`;
 export const TOUR_GET_GO_LOCATION = `${LOCALHOST}/api/v1/tours/filter/go_location/`;
-export const TOUR_GET_DEPARTMENT_RANGE = `${LOCALHOST}/api/v1/tours/filter/department_location/`;
+export const TOUR_GET_DEPARTMENT_LOCATION = `${LOCALHOST}/api/v1/tours/filter/department_location/`;
 

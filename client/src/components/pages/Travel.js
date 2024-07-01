@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import useApi from '../../hooks/toursApi';
+import useChildManagement from '../../hooks/tourFT';
 import { TOUR_GET_ALL_DATA } from "../../constants/apiConfig";
 
 import { tinh } from "../../constants/provinces";
@@ -15,6 +16,8 @@ import DayStartFilter from '../common/daystartFilter';
 import TranspostionFilter from '../common/transpotionFilter';
 import BudgeFilter from '../common/budgetFilter';
 import ToursList from '../common/tourslist';
+
+import LoaderComponent from '../common/loaders';
 
 const Style = () => {
   return (
@@ -720,23 +723,43 @@ const Style = () => {
 };
 
 const Travel = () => {
-  const { data, loading } = useApi(TOUR_GET_ALL_DATA);
-  const [tours, setTours] = useState([]);
+
+  const { selectedValue, handleChildClick, clickedComponent } = useChildManagement();
+
+  const { data, loading, fetchData, FILTER } = useApi();
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
-    if (data) {
-      setTours(data);
+    fetchData(TOUR_GET_ALL_DATA);
+  }, [fetchData]);
+
+
+  useEffect(() => {
+    if (loading) {
+      setShowLoader(true);
+    } else {
+      const timer = setTimeout(() => {
+        setShowLoader(false);
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [data]);
-
-  if (loading) {
-    return <p>Loading...</p>;
+  }, [loading]);
+  
+  let tours = Array.isArray(data) ? data : [];
+  if (tours.length === 0) {
+    tours = [];
+    // return (
+    // <>  
+    //   < LoaderComponent />
+    // </>)
   }
 
-  if (!tours || tours.length === 0) {
-    return <p>No tours available.</p>;
+  if (showLoader) {
+    return (
+    <>
+      < LoaderComponent />
+    </>)
   }
-
 
   return (
     <>
@@ -747,10 +770,9 @@ const Travel = () => {
         <div className="row">
           <ul className="breadcrumbs__wrapper d-flex align-items-center">
             <li>
-              <Link to="/" style={{ marginLeft: '10px' }}>
+              <Link style={{ marginLeft: '10px' }}>
                 <span>Du lịch</span>
               </Link>
-              {/* <!-- » --> */}
             </li>
           </ul>
         </div>
@@ -776,20 +798,67 @@ const Travel = () => {
                     </div>
 
                     <div className="pt-2" style={{ paddingTop: '16px' }}>
+                      < StartLocationFilter 
+                        tinh={tinh} 
+                        FILTER={FILTER} 
+                        fetchData={fetchData} 
 
-                      < GoLocationFilter tinh={tinh} />
+                        name="diemdi"
+                        onClick={handleChildClick}
+                        choose={selectedValue}
+                        owner={clickedComponent}
+                      />
 
-                      < StartLocationFilter tinh={tinh} />
+                      < GoLocationFilter 
+                        tinh={tinh} 
+                        FILTER={FILTER} 
+                        fetchData={fetchData} 
 
-                      < TimeDayTravelFilter buttons1={buttons1} />
+                        name="diemden"
+                        onClick={handleChildClick}
+                        choose={selectedValue}
+                        owner={clickedComponent}
+                      />
 
-                      < DayStartFilter />
+                      < TimeDayTravelFilter 
+                        buttons1={buttons1} 
+                        FILTER={FILTER} 
+                        
+                        name="timerange"
+                        onClick={handleChildClick}
+                        choose={selectedValue}
+                        owner={clickedComponent}
+                      />
+
+                      < DayStartFilter 
+                        FILTER={FILTER} 
+  
+                        name="date"
+                        onClick={handleChildClick}
+                        choose={selectedValue}
+                        owner={clickedComponent}  
+                      />
 
                       <br />
 
-                      < TranspostionFilter buttons2={buttons2} />
+                      < TranspostionFilter 
+                        buttons2={buttons2} 
+                        FILTER={FILTER} 
+                        
+                        name="trans"
+                        onClick={handleChildClick}
+                        choose={selectedValue}
+                        owner={clickedComponent}
+                      />
 
-                      < BudgeFilter/>
+                      < BudgeFilter 
+                        FILTER={FILTER} 
+  
+                        name="budget"
+                        onClick={handleChildClick}
+                        choose={selectedValue}
+                        owner={clickedComponent}
+                      />
 
                     </div>
 

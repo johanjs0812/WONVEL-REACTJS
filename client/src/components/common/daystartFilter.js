@@ -7,7 +7,7 @@ const DateButton = () =>{
     }
 }
 
-const DayStartFilter = () => {
+const DayStartFilter = ({FILTER, name, onClick, choose, owner}) => {
 
     return (
         <>
@@ -20,7 +20,13 @@ const DayStartFilter = () => {
                 <div className="calendarWrap bg-transparent" style={{ overflow: 'hidden' }}>
 
                 <div className='MaterialDataPicker' >
-                    < MaterialDatePicker/>
+                    < MaterialDatePicker
+                        FILTER={FILTER} 
+                        name={name}
+                        onClick={onClick}
+                        choose={choose}
+                        owner={owner}           
+                    />
                 </div>
                 
                 </div>

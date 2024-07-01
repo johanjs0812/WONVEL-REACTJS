@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { TOUR_GET_GO_LOCATION, TOUR_GET_ALL_DATA} from "../../constants/apiConfig";
 
-const GoLocationFilter = ({tinh}) => {
+const GoLocationFilter = ({tinh, FILTER, fetchData, name, onClick, choose, owner}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Tất cả');
+
+  useEffect(() => {
+    if (owner === name) {
+      setSelectedOption(choose);
+    }
+  }, [owner, name, choose]);
 
   const handleOutsideClick = () => {
     setIsDropdownOpen(false);
   };
 
   const handleOptionClick = (province) => {
+    if (province === "Tất cả") {
+      fetchData(TOUR_GET_ALL_DATA);
+      setSelectedOption(province);
+      setIsDropdownOpen(false);
+
+      onClick(province, name);
+      return;
+    }
+
+    FILTER(`${TOUR_GET_GO_LOCATION}${province}`);
     setSelectedOption(province);
     setIsDropdownOpen(false);
+    
+    onClick(province, name);
   };
 
   const toggleDropdown = () => {
@@ -20,7 +39,7 @@ const GoLocationFilter = ({tinh}) => {
 
   return (
     <div className="start-to-stop">
-      <h5 className="point-start-title s-title">Điểm đi</h5>
+      <h5 className="point-start-title s-title">Điểm đến</h5>
 
       <div className="css-b62m3t-container" style={{ position: 'relative' }}>
         <div className="css-13cymwt-control" style={{ cursor: 'pointer' }} onClick={toggleDropdown}>

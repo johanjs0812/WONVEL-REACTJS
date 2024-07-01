@@ -135,7 +135,7 @@ const getDepartmentLocationFT = async (req, res, next) => {
     try {
         const location = req.params.location;
 
-        const respondata = await Instance.getToursByStartDate(location);
+        const respondata = await Instance.getToursByDepartureLocation(location);
 
         if (!respondata) {
             console.error('Failed to fetch Data');

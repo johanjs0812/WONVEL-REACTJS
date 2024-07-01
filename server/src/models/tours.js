@@ -71,11 +71,17 @@ class TourTable {
 
     // Phương thức lấy các tour theo price range
     getToursByPriceRange(minPrice, maxPrice) {
+        let priceCondition = {};
+        if (minPrice !== undefined) {
+            priceCondition[Op.gte] = minPrice;
+        }
+        if (maxPrice !== undefined) {
+            priceCondition[Op.lte] = maxPrice;
+        }
+
         return this.tours.findAll({
             where: {
-                price: {
-                    [Sequelize.Op.between]: [minPrice, maxPrice]
-                }
+                price: priceCondition
             }
         });
     }
