@@ -60,10 +60,7 @@ const addData = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     try {
-        console.log('cmn',req.body)
-
         const user = await Instance.checkLogin(req.body.email, req.body.pass);
-        console.log('xxx', user)
         if (!user) {
             console.error('Invalid email or password');
             return res.status(401).json({ error: 'Invalid email or password' });
@@ -85,9 +82,7 @@ const singup = async (req, res, next) => {
     try {
 
         const user = await Instance.checkSingup(req.body.phone_number, req.body.email);
-        console.log('ccc',user)
         if (user) {
-            console.error('phone or email');
             return res.status(401).json({ error: 'phone or email' });
         }
 
@@ -96,8 +91,8 @@ const singup = async (req, res, next) => {
         res.json(userObject);
 
     } catch (err) {
-        console.error('Failed to login', err);
-        res.status(500).json({ error: 'Failed to login' });
+        console.error('Failed to signup', err);
+        res.status(500).json({ error: 'Failed to signup' });
     }
 };
 

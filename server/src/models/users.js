@@ -1,6 +1,6 @@
-const { sequelize } = require('../util/mysql'); // Import sequelize từ mysql.js
+const { sequelize } = require('../util/mysql'); 
 const Sequelize = require('sequelize');
-const { Op } = require('sequelize'); // Nếu bạn đang sử dụng CommonJS
+const { Op } = require('sequelize'); 
 
 const user = sequelize.define('user', {
     email: {
@@ -50,8 +50,13 @@ class UsersTable {
 
     // Phương thức kiểm tra email và mật khẩu
     checkLogin(email, pass) {
-        return this.user.findOne({ where: { email: email, pass: pass, pass: { [Op.ne]: null } } });
-    }    
+        return this.user.findOne({ 
+            where: { 
+                email: email, 
+                pass: { [Op.ne]: null, [Op.eq]: pass } 
+            } 
+        });
+    }
 
     checkSingup(phonenumber, email) {
         return this.user.findOne({ 

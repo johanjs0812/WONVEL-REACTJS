@@ -748,10 +748,6 @@ const Travel = () => {
   let tours = Array.isArray(data) ? data : [];
   if (tours.length === 0) {
     tours = [];
-    // return (
-    // <>  
-    //   < LoaderComponent />
-    // </>)
   }
 
   if (showLoader) {

@@ -7,7 +7,7 @@ usersRouter.get('/api/v1/users', getData);
 usersRouter.get('/api/v1/users/:id', getDataId);
 
 usersRouter.post('/api/v2/users/login', login);
-usersRouter.post('/api/v2/users/singup', singup);
+usersRouter.post('/api/v2/users/signup', singup);
 
 usersRouter.post('/api/v2/users', addData);
 

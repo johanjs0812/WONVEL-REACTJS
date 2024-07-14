@@ -11,3 +11,5 @@ export const TOUR_GET_PRICE_RANGE = `${LOCALHOST}/api/v1/tours/filter/price_rang
 export const TOUR_GET_GO_LOCATION = `${LOCALHOST}/api/v1/tours/filter/go_location/`;
 export const TOUR_GET_DEPARTMENT_LOCATION = `${LOCALHOST}/api/v1/tours/filter/department_location/`;
 
+export const USER_LOGIN = `${LOCALHOST}/api/v2/users/login/`; 
+export const USER_SIGNUP = `${LOCALHOST}/api/v2/users/signup/`;
