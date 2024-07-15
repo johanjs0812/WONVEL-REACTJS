@@ -9,6 +9,7 @@ import SupportPmComponent from "../common/support-pm";
 
 import useApi from "../../hooks/toursApi";
 import { TOUR_GET_BY_ID_DATA } from "../../constants/apiConfig";
+import useForm from "../../hooks/useFormPm";
 
 const Style = () => {
     return (
@@ -1223,16 +1224,16 @@ const InformationPayment = () => {
     const { data, fetchDataById } = useApi();
 
     const [isFormValid, setIsFormValid] = useState(false);
-
-    const handleSubmit = () => {
+    const handleSubmitContact = () => {
       const formElement = document.getElementById("form");
       if (formElement.checkValidity()) {
         setIsFormValid(true);
-        console.log('Form submitted successfully');
+        // console.log('Form submitted successfully');
         alert('Form submitted successfully');
       } else {
         setIsFormValid(false);
-        console.log('Form has errors.');
+        // console.log('Form has errors.');
+        // alert('Form submitted successfully');
         formElement.reportValidity();
       }
     };
@@ -1240,8 +1241,59 @@ const InformationPayment = () => {
     useEffect(() => {
       const url = `${TOUR_GET_BY_ID_DATA}${id}`;
       fetchDataById(url);
-      console.log('alo', data)
     }, [id, fetchDataById]);
+
+    // =====================FORM GUETS=========================
+    const initialFormState = Array.from({ length: 0 }, () => ({
+      fullName: '',
+      gender: '',
+      dayOfMonth: '',
+      monthOfYear: '',
+      year: '',
+      errors: {}
+    }));
+
+    const { forms: forms1, handleChange: handleChange1, handleSubmit: handleSubmitForm1, updateForms: updateForms1 } = useForm(initialFormState);
+    const { forms: forms2, handleChange: handleChange2, handleSubmit: handleSubmitForm2, updateForms: updateForms2 } = useForm(initialFormState);
+    const { forms: forms3, handleChange: handleChange3, handleSubmit: handleSubmitForm3, updateForms: updateForms3 } = useForm(initialFormState);
+    const { forms: forms4, handleChange: handleChange4, handleSubmit: handleSubmitForm4, updateForms: updateForms4 } = useForm(initialFormState);
+
+    const handleSubmit1 = (formData) => {
+        console.log('Form 1 data:', formData);
+    };
+
+    const handleSubmit2 = (formData) => {
+        console.log('Form 2 data:', formData);
+    };
+
+    const handleSubmit3 = (formData) => {
+      console.log('Form 2 data:', formData);
+    };
+
+    const handleSubmit4 = (formData) => {
+      console.log('Form 2 data:', formData);
+    };
+
+    const [formData1, setFormData1] = useState(null);
+    const [formData2, setFormData2] = useState(null);
+    const [formData3, setFormData3] = useState(null);
+    const [formData4, setFormData4] = useState(null);
+
+    const receiveFormData1 = (data) => {
+        setFormData1(data);
+    };
+
+    const receiveFormData2 = (data) => {
+        setFormData2(data);
+    };
+
+    const receiveFormData3 = (data) => {
+      setFormData3(data);
+    };
+
+    const receiveFormData4 = (data) => {
+      setFormData4(data);
+  };
 
     return (
         <>
@@ -1267,12 +1319,53 @@ const InformationPayment = () => {
                         < InforTourPmComponent data={data} />
                         <div style={{display: "flex"}} className="phanchiathienha">
                             <div className="col-md-8 col-12 left" style={{padding: "0 12px"}}>
-                                < TongQuanTourPmComponent  />
-                                {/* < PaymentMethodComponent /> */}
+                                < TongQuanTourPmComponent 
+                                  forms1={forms1}
+                                  handleChange1={handleChange1}
+                                  handleSubmitForm1={handleSubmitForm1(handleSubmit1)}
+                                  updateForms1={updateForms1}
+
+                                  forms2={forms2}
+                                  handleChange2={handleChange2}
+                                  handleSubmitForm2={handleSubmitForm2(handleSubmit2)}
+                                  updateForms2={updateForms2}
+
+                                  forms3={forms3}
+                                  handleChange3={handleChange3}
+                                  handleSubmitForm3={handleSubmitForm3(handleSubmit3)}
+                                  updateForms3={updateForms3}
+
+                                  forms4={forms4}
+                                  handleChange4={handleChange4}
+                                  handleSubmitForm4={handleSubmitForm4(handleSubmit4)}
+                                  updateForms4={updateForms4}
+
+                                  receiveFormData1={receiveFormData1}
+                                  receiveFormData2={receiveFormData2}
+                                  receiveFormData3={receiveFormData3}
+                                  receiveFormData4={receiveFormData4}
+                                />
+
+                                < PaymentMethodComponent />
+
                             </div>
                             <div className="col-md-4 col-12 right">
                                 < SupportPmComponent />
-                                < CheckoutPmComponent data={data} handleSubmit={handleSubmit} isFormValid={isFormValid}  />
+                                < CheckoutPmComponent 
+                                  data={data} 
+                                  handleSubmitContact={handleSubmitContact} 
+                                  isFormValid={isFormValid} 
+
+                                  handleSubmit1={handleSubmitForm1(handleSubmit1)}
+                                  handleSubmit2={handleSubmitForm2(handleSubmit2)}
+                                  handleSubmit3={handleSubmitForm1(handleSubmit3)}
+                                  handleSubmit4={handleSubmitForm2(handleSubmit4)}
+
+                                  formData1={formData1}
+                                  formData2={formData2}
+                                  formData3={formData3}
+                                  formData4={formData4}
+                                />
                             </div>
                         </div>
                     </div>

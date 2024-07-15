@@ -5,6 +5,7 @@ const InforTourPmComponent = ({data}) => {
 
     const tour = data;
 
+
     return (
         <>   
             <div className="col-12 top">

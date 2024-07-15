@@ -41,7 +41,7 @@ const useApi = () => {
   const fetchDataById = useCallback(async (url) => {
     setLoading(true);
     setError(null);
-    console.log('ko?', url)
+    // console.log('ko?', url)
 
     try {
       const response = await axios.get(url);

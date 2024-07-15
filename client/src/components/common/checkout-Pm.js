@@ -1,4 +1,8 @@
-const CheckoutPmComponent = ({data, handleSubmit, isFormValid}) => {
+const CheckoutPmComponent = ({
+    data, handleSubmitContact, isFormValid, 
+    handleSubmit1, handleSubmit2, 
+    formData1, formData2 }) => {
+
     const tour = data;
 
     const total = '';
@@ -6,7 +10,19 @@ const CheckoutPmComponent = ({data, handleSubmit, isFormValid}) => {
     const adultsArray = [];
     const babysArray = [];
     const childrenArray = [];
+
+    const handleAllSubmit = () => {
+        handleSubmit1(formData1);
+        handleSubmit2(formData2);
+    };
+  
     
+    const handleBothSubmits = () => {
+        handleAllSubmit();
+        handleSubmitContact();
+    };
+      
+
     return (
         <>
             <div className="group-checkout">
@@ -88,7 +104,7 @@ const CheckoutPmComponent = ({data, handleSubmit, isFormValid}) => {
                         </tbody>
                     </table>
 
-                    <button className="btn btn-primary btn-order" onClick={handleSubmit}>Đặt ngay</button>
+                    <button className="btn btn-primary btn-order" onClick={handleBothSubmits}>Đặt ngay</button>
                     
                     {!isFormValid && <div className="error-message">Please correct the errors in the form.</div>}
 
