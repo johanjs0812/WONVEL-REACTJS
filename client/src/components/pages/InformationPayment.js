@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import InforTourPmComponent from "../common/infor-tour-pm-page";
 import TongQuanTourPmComponent from "../common/tong-quan-tour-pm";
@@ -7,9 +8,13 @@ import PaymentMethodComponent from "../common/payment-method";
 import CheckoutPmComponent from "../common/checkout-Pm";
 import SupportPmComponent from "../common/support-pm";
 
-import useApi from "../../hooks/toursApi";
 import { TOUR_GET_BY_ID_DATA } from "../../constants/apiConfig";
+
+import useApi from "../../hooks/toursApi";
 import useForm from "../../hooks/useFormPm";
+
+import { addItem, addtour } from "../../redux/slices/paymentSlice";
+import { setPreviousPageUrl } from "../../redux/slices/navigationSlice";
 
 const Style = () => {
     return (
@@ -1219,29 +1224,36 @@ const Style = () => {
 };
 
 const InformationPayment = () => {
-    const page = 'inf';
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const { id } = useParams();
     const { data, fetchDataById } = useApi();
+    const location = useLocation();
+    
+    const storedUserLogin = sessionStorage.getItem('user_login');
+    if (!storedUserLogin) {
+      navigate('/login');
+      dispatch(setPreviousPageUrl(location.pathname));
+    }
+
+    useEffect(() => {
+      const url = `${TOUR_GET_BY_ID_DATA}${id}`;
+      fetchDataById(url);
+    }, [id, fetchDataById]);
+
+    // =====================FORM CONTACT=========================
 
     const [isFormValid, setIsFormValid] = useState(false);
     const handleSubmitContact = () => {
       const formElement = document.getElementById("form");
       if (formElement.checkValidity()) {
         setIsFormValid(true);
-        // console.log('Form submitted successfully');
-        alert('Form submitted successfully');
       } else {
         setIsFormValid(false);
-        // console.log('Form has errors.');
-        // alert('Form submitted successfully');
         formElement.reportValidity();
       }
     };
-
-    useEffect(() => {
-      const url = `${TOUR_GET_BY_ID_DATA}${id}`;
-      fetchDataById(url);
-    }, [id, fetchDataById]);
 
     // =====================FORM GUETS=========================
     const initialFormState = Array.from({ length: 0 }, () => ({
@@ -1258,21 +1270,18 @@ const InformationPayment = () => {
     const { forms: forms3, handleChange: handleChange3, handleSubmit: handleSubmitForm3, updateForms: updateForms3 } = useForm(initialFormState);
     const { forms: forms4, handleChange: handleChange4, handleSubmit: handleSubmitForm4, updateForms: updateForms4 } = useForm(initialFormState);
 
-    const handleSubmit1 = (formData) => {
-        console.log('Form 1 data:', formData);
+    const [formDataList, setFormDataList] = useState([]);
+
+    const handleSubmit = (formData, formNumber) => {
+      if (formData.length > 0) {
+        setFormDataList(prevList => [...prevList, { formNumber, formData }]);
+      }
     };
 
-    const handleSubmit2 = (formData) => {
-        console.log('Form 2 data:', formData);
-    };
-
-    const handleSubmit3 = (formData) => {
-      console.log('Form 2 data:', formData);
-    };
-
-    const handleSubmit4 = (formData) => {
-      console.log('Form 2 data:', formData);
-    };
+    const handleSubmit1 = (formData) => handleSubmit(formData, 1);
+    const handleSubmit2 = (formData) => handleSubmit(formData, 2);
+    const handleSubmit3 = (formData) => handleSubmit(formData, 3);
+    const handleSubmit4 = (formData) => handleSubmit(formData, 4);
 
     const [formData1, setFormData1] = useState(null);
     const [formData2, setFormData2] = useState(null);
@@ -1293,7 +1302,22 @@ const InformationPayment = () => {
 
     const receiveFormData4 = (data) => {
       setFormData4(data);
-  };
+   };
+
+  //  ===================CHECK FULL=======================
+    const [page, setPage] = useState('inf');
+
+    const paymentState = useSelector((state) => state.payment);
+  
+    useEffect(() => {
+      if (isFormValid && formDataList.length > 0) {
+          dispatch(addItem(formDataList));
+          dispatch(addtour(data));
+          if (paymentState.guets.length > 0) {
+            setPage('method');
+          }
+      }
+    }, [isFormValid, formDataList, paymentState]);
 
     return (
         <>
@@ -1303,20 +1327,22 @@ const InformationPayment = () => {
                 <section className="checkout-head d-block d-lg-block">
                     <div className="container">
                         <div className="row">
-                        <ul className="head col-12">
-                            <li className="checked">1. Nhập thông tin</li>
-                            <li className="checked">
-                            <i className="bx bx-chevron-right"></i>
-                            </li>
-                            <li className={page === 'method' ? 'checked' : ''}>2. Thanh toán</li>
-                        </ul>
+                          <ul className="head col-12" >
+                              <li className="checked">1. Nhập thông tin</li>
+                              <li className="checked" style={{display:"flex", alignItems: "center"}}>
+                                <i className="bx bx-chevron-right"></i>
+                              </li>
+                              <li className={page === 'method' ? 'checked' : ''}>2. Thanh toán</li>
+                          </ul>
                         </div>
                     </div>
                 </section>
 
                 <section className="checkout-main order-tour animate__fadeIn animate__animated">
                     <div className="container">
-                        < InforTourPmComponent data={data} />
+
+                        < InforTourPmComponent data={data} page={page}/>
+
                         <div style={{display: "flex"}} className="phanchiathienha">
                             <div className="col-md-8 col-12 left" style={{padding: "0 12px"}}>
                                 < TongQuanTourPmComponent 
@@ -1344,9 +1370,15 @@ const InformationPayment = () => {
                                   receiveFormData2={receiveFormData2}
                                   receiveFormData3={receiveFormData3}
                                   receiveFormData4={receiveFormData4}
+
+                                  page={page}
                                 />
 
-                                < PaymentMethodComponent />
+                                < PaymentMethodComponent
+                                
+                                  page={page}
+                                
+                                />
 
                             </div>
                             <div className="col-md-4 col-12 right">
@@ -1358,13 +1390,15 @@ const InformationPayment = () => {
 
                                   handleSubmit1={handleSubmitForm1(handleSubmit1)}
                                   handleSubmit2={handleSubmitForm2(handleSubmit2)}
-                                  handleSubmit3={handleSubmitForm1(handleSubmit3)}
-                                  handleSubmit4={handleSubmitForm2(handleSubmit4)}
+                                  handleSubmit3={handleSubmitForm3(handleSubmit3)}
+                                  handleSubmit4={handleSubmitForm4(handleSubmit4)}
 
                                   formData1={formData1}
                                   formData2={formData2}
                                   formData3={formData3}
                                   formData4={formData4}
+
+                                  page={page}
                                 />
                             </div>
                         </div>

@@ -1,6 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { addContact } from '../../redux/slices/paymentSlice';
 
 const ContactFormPmComponent = () => {
+
+  const [userLogin, setUserLogin] = useState('');
+
+  useEffect(() => {
+    const storedUserLogin = sessionStorage.getItem('user_login');
+
+    if (storedUserLogin) {
+      const sessionObject = JSON.parse(storedUserLogin);
+      setUserLogin(sessionObject);
+    }
+  }, []); 
+
   const [formValues, setFormValues] = useState({
     fullName: '',
     email: '',
@@ -8,12 +23,17 @@ const ContactFormPmComponent = () => {
     address: '',
   });
 
+  const dispatch = useDispatch();
+  // const paymentState = useSelector((state) => state.payment);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
       [name]: value,
     });
+
+    dispatch(addContact(formValues));
   };
 
   return (
@@ -27,7 +47,7 @@ const ContactFormPmComponent = () => {
             type="text"
             className="form-control"
             name="fullName"
-            value={formValues.fullName}
+            value={formValues.fullName || userLogin.full_name}
             onChange={handleInputChange}
             required
             minLength={6}
@@ -41,7 +61,7 @@ const ContactFormPmComponent = () => {
             type="email"
             className="form-control"
             name="email"
-            value={formValues.email}
+            value={formValues.email || userLogin.email}
             onChange={handleInputChange}
             required
             pattern="\S+@\S+\.\S+"
@@ -55,7 +75,7 @@ const ContactFormPmComponent = () => {
             type="number"
             className="form-control"
             name="phone"
-            value={formValues.phone}
+            value={formValues.phone || userLogin.phone_number}
             onChange={handleInputChange}
             required
             minLength={10}
@@ -69,7 +89,7 @@ const ContactFormPmComponent = () => {
             type="text"
             className="form-control"
             name="address"
-            value={formValues.address}
+            value={formValues.address || userLogin.address}
             onChange={handleInputChange}
             style={{ marginBottom: '18px' }}
           />

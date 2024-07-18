@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useApi from '../../hooks/toursApi';
 
@@ -6,7 +6,6 @@ import { TOUR_DISCOUNTING_PRICE } from "../../constants/apiConfig";
 import formatCurrency from '../../helpers/formatVnd';
 import calculateDiscountPercentage from '../../helpers/DiscountPercentage';
 import formatDate from '../../helpers/formatTime';
-
 
 const Style = () => {
   return (
@@ -196,15 +195,18 @@ const Style = () => {
 
 const ProductSection = () => {
 
-  const { data, loading } = useApi(`${TOUR_DISCOUNTING_PRICE}`);
+  const { data, fetchData } = useApi();
 
-  const tour = data.slice(0, 3)
-
-  if (loading) {
-    return console.log('dang tai');
+  useEffect(() => {
+    fetchData(TOUR_DISCOUNTING_PRICE);
+  }, [fetchData]);
+  
+  let tours = Array.isArray(data) ? data : [];
+  if (tours.length === 0) {
+    tours = [];
   }
 
-  console.log(data)
+  const tour = data.slice(0, 3)
 
   return (
     <>

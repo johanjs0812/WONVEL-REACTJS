@@ -34,7 +34,9 @@ const TongQuanTourPmComponent = ({
         receiveFormData1,
         receiveFormData2,
         receiveFormData3,
-        receiveFormData4
+        receiveFormData4,
+
+        page
     }) => {
 
     const { guestCounts, increment, decrement } = useGuestCounts();
@@ -72,7 +74,7 @@ const TongQuanTourPmComponent = ({
 
     return (
         <>
-            <div className="payment-infor">
+            <div className="payment-infor" style={{ display: page === 'inf' ? 'block' : 'none' }}>
                 <h2 className="d-none d-lg-block">Tổng quan về chuyến đi</h2>
                 <h3>Thông tin liên lạc</h3>
 

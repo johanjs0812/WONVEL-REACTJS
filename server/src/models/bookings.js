@@ -122,6 +122,45 @@ class BookingsTable {
           ]
         });
     }
+
+    async getBookingsWithUserAndInvoices(userId) {
+        // Lấy tất cả các bản ghi từ bảng booking có user_id cụ thể
+        const userBookings = await this.bookings.findAll({
+            where: { user_id: userId },
+            include: [
+                {
+                    model: tours,
+                    required: true
+                }
+            ]
+        });
+
+        // Lấy các booking_id từ userBookings
+        const bookingIds = userBookings.map(booking => booking.id);
+
+        // Lấy tất cả các hóa đơn liên quan đến các booking_id đó
+        const relatedInvoices = await invoices.findAll({
+            where: {
+                booking_id: bookingIds
+            }
+        });
+
+        // Lấy các tour_id từ userBookings
+        const tourIds = userBookings.map(booking => booking.tour_id);
+
+        // Lấy tất cả các tour liên quan đến các tour_id đó
+        const relatedTours = await tours.findAll({
+            where: {
+                id: tourIds
+            }
+        });
+
+        return {
+            userBookings,
+            relatedInvoices,
+            relatedTours
+        };
+    }
       
 }
 

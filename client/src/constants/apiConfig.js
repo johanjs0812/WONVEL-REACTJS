@@ -13,3 +13,10 @@ export const TOUR_GET_DEPARTMENT_LOCATION = `${LOCALHOST}/api/v1/tours/filter/de
 
 export const USER_LOGIN = `${LOCALHOST}/api/v2/users/login/`; 
 export const USER_SIGNUP = `${LOCALHOST}/api/v2/users/signup/`;
+
+export const BOOKING_ADD = `${LOCALHOST}/api/v1/bookings`;
+
+export const GUETS_ADD = `${LOCALHOST}/api/v2/guests`;
+
+export const YOURORDER_GET = `${LOCALHOST}/api/v2/bookings/yourorder/`;
+export const INVOICES_ADD = `${LOCALHOST}/api/v1/invoices`;

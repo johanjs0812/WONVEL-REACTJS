@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginSuccess, loginFailure } from '../../redux/slices/authSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate  } from 'react-router-dom';
 import useApi from '../../hooks/userApi';
 import LoaderComponent from '../common/loaders';
+import Notification from '../common/Notification';
 
 const Style = () => {
     return (
@@ -19,8 +19,6 @@ const Style = () => {
         margin-bottom: .5rem;
         margin-top: 0;
         }
-
-
 
         .login {
         min-height: 100%;
@@ -335,13 +333,27 @@ const Style = () => {
 
 const Login = () => {
     const navigate = useNavigate();
-    const { login, loginError } = useApi();
+    const { login } = useApi();
+
+    const Redux_navigation = useSelector((state) => state.navigation);
+    const [showNotification, setShowNotification] = useState(false);
+
+    useEffect(() => {
+        if (Redux_navigation) {
+        setShowNotification(true);
+
+        const timer = setTimeout(() => {
+            setShowNotification(false);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+        }
+    }, [Redux_navigation])
 
     const [gmail, setGmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
 
-    const dispatch = useDispatch();
     const error = useSelector((state) => state.auth.error);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -382,7 +394,6 @@ const Login = () => {
 
             const startTime = Date.now();
             const response = await login(gmail, password);
-            
             const elapsedTime = Date.now() - startTime;
             const remainingTime = Math.max(0, 1000 - elapsedTime);
             
@@ -390,14 +401,17 @@ const Login = () => {
                 setIsLoading(false);
 
                 if (response) {
-                    dispatch(loginSuccess());
-                    navigate('/');
+                    console.log('response', response);
+                    sessionStorage.setItem('user_login', JSON.stringify(response));
+
+                    const event = new Event('userLoginChanged');
+                    window.dispatchEvent(event);
+                    navigate(`/travel`);
                 }
             }, remainingTime);
 
         } catch (err) {
             console.error('Login failed:', err);
-            dispatch(loginFailure('Email hoặc mật khẩu không chính xác'));
             setIsLoading(false);
         }
     };
@@ -407,6 +421,9 @@ const Login = () => {
             <LoaderComponent />
         ) : (
         <>
+        {showNotification && (
+            < Notification/>
+        )}
         < Style/>
             <main className="login">
             <div className="wrapper">

@@ -78,7 +78,7 @@ const Banner = () => {
                         </div>
 
                         <div className="flex-righ-klol">
-                          <label htmlFor="react-select-2-input" className="h212">Ngày đi</label>
+                          <div className="h212">Ngày đi</div>
                           <div className="location-select">
                             <div className="text-select-location">
                               12/05/2024

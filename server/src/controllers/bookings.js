@@ -76,10 +76,37 @@ const getPayment = async (req, res, next) => {
     };
 }
 
+const getYourOrder = async (req, res, next) => {
+    try {
+        const iduser = req.params.id;
+
+        const respondata = await bookingsTableInstance.getBookingsWithUserAndInvoices(iduser);
+
+        if (!respondata) {
+            console.error('Failed to fetch Data');
+            return res.status(404).json({ error: 'data not found' });
+        }
+
+        // Chuyển đổi các mảng dữ liệu thành JSON
+        const dataObjects = {
+            userBookings: respondata.userBookings.map(booking => booking.toJSON()),
+            relatedInvoices: respondata.relatedInvoices.map(invoice => invoice.toJSON()),
+            relatedTours: respondata.relatedTours.map(tour => tour.toJSON())
+        };
+
+        res.json(dataObjects);
+
+    } catch (err) {
+        console.error('Failed to fetch data', err);
+        res.status(500).json({ error: 'Failed to fetch data' });
+    }
+}
+
 module.exports = {
     getData,
     getDataId,
     addData,
-    getPayment
+    getPayment,
+    getYourOrder
 };
 

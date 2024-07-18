@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
@@ -12,6 +11,7 @@ import Login from './components/pages/Login';
 import Signup from './components/pages/Signup';
 import InformationPayment from './components/pages/InformationPayment';
 import Payment from './components/pages/Payment';
+import HistoryOrder from './components/pages/HistoryOrder';
 
 function App() {
 
@@ -28,6 +28,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/inforpm/:id" element={<InformationPayment />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/yourorder" element={<HistoryOrder />} />
           </Routes>
         </MainLayout>
       </Router>

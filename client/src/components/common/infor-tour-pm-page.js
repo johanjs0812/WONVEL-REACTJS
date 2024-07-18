@@ -1,14 +1,13 @@
 import calculateDaysBetweenDates from "../../helpers/DayBetweensDates";
 import formatDate from "../../helpers/formatTime";
 
-const InforTourPmComponent = ({data}) => {
+const InforTourPmComponent = ({data, page}) => {
 
     const tour = data;
 
-
     return (
         <>   
-            <div className="col-12 top">
+            <div className="col-12 top" style={{ display: page === 'inf' ? 'block' : 'none' }}>
                 <div className="product">
                     <div className="product-image">
                     <div className="image">

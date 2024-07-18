@@ -1,4 +1,4 @@
-const { sequelize } = require('../util/mysql'); // Import sequelize từ mysql.js
+const { sequelize } = require('../util/mysql'); 
 const Sequelize = require('sequelize');
 
 const guests = sequelize.define('guests', {

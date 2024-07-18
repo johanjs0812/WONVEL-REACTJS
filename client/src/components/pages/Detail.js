@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TOUR_GET_BY_ID_DATA } from "../../constants/apiConfig";
 import { useParams } from 'react-router-dom';
@@ -351,22 +351,22 @@ const Style = () => {
     );
 };
 
-
 const Detail = () => {
 
   const { id } = useParams();
-  const { data, loading } = useApi(`${TOUR_GET_BY_ID_DATA}${id}`);
+  const { data, fetchDataById } = useApi();
+
+  useEffect(() => {
+    fetchDataById(`${TOUR_GET_BY_ID_DATA}${id}`);
+  }, [fetchDataById]);
   
-  if (loading) {
-    return console.log('dang tai');
+
+  let tour;
+  if (data) {
+    tour = data;
   }
 
-  console.log(data)
-  const tour = data;
-
-    // const timeday = calculateDaysBetweenDates(tour.tour.start_date, tour.end_date);
-
-    return(
+  return(
     <>
     < Style />
         <div className="detail-page">
@@ -381,13 +381,13 @@ const Detail = () => {
                     </li>
                     <li>
                     <Link to="" style={{ marginLeft: '10px' }}>
-                        <span>Tour {tour.destination.provinces}</span>
+                        <span>Tour {tour.destination?.provinces}</span>
                     </Link>
                     »
                     </li>
                     <li>
                     <Link style={{ marginLeft: '10px' }}>
-                        <span>{tour.tour.tour_name}</span>
+                        <span>{tour.tour?.tour_name}</span>
                     </Link>
                     </li>
                 </ul>
@@ -401,29 +401,29 @@ const Detail = () => {
                 <div className="p-3">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                     <i className='bx bxs-coupon' style={{ marginRight: '15px', color: '#4d4aef', fontSize: '16px' }}></i>
-                    <p style={{ color: '#4d4aef', fontSize: '13px' }}>{tour.tour.code_tour}</p>
+                    <p style={{ color: '#4d4aef', fontSize: '13px' }}>{tour.tour?.code_tour}</p>
                     </div>
                 </div>
                 </div>
                 <div className="row" style={{ alignItems: 'center' }}>
                 <div className="left-head">
                     <h1 style={{ margin: '0' }} className="title">
-                    {tour.tour.tour_name}
+                    {tour.tour?.tour_name}
                     </h1>
                 </div>
 
                 <div className="right-head">
                     <div className="group-price">
                     <div className="sale-price">
-                        <p><span className="price">{formatCurrency(tour.tour.price)}</span>/ khách</p>
+                        <p><span className="price">{formatCurrency(tour.tour?.price)}</span>/ khách</p>
                     </div>
                     </div>
 
                     <div className="group-add-cart">
-                    <Link title="Đặt ngay" to={`/inforpm/${tour.tour.id}`} className="add-to-cart">
+                    <Link title="Đặt ngay" to={`/inforpm/${tour.tour?.id}`} className="add-to-cart">
                         <i className='bx bx-cart'></i>Đặt ngay
                     </Link>
-                    <Link href="#" className="add-to-group">Liên hệ tư vấn</Link>
+                    <Link className="add-to-group">Liên hệ tư vấn</Link>
                     </div>
                 </div>
                 </div>
@@ -433,7 +433,7 @@ const Detail = () => {
 
             <div className="container">
                 <div className="box-img">
-                <img src={tour.tour.img} alt="" />
+                <img src={tour.tour?.img} alt="" />
                 </div>
             </div>
 
@@ -444,9 +444,9 @@ const Detail = () => {
                 <div className="left-dt-op">
                     <div className="box-order">
                     <div className="time">
-                        <p>Khởi hành <b>{formatDate(tour.tour.start_date)}</b></p>
-                        <p>Thời gian <b>{calculateDaysBetweenDates(tour.tour.start_date, tour.tour.end_date)}</b></p>
-                        <p>Nơi khởi hành <b>{tour.tour.departure_location}</b></p>
+                        <p>Khởi hành <b>{formatDate(tour.tour?.start_date)}</b></p>
+                        <p>Thời gian <b>{calculateDaysBetweenDates(tour.tour?.start_date, tour.tour?.end_date)}</b></p>
+                        <p>Nơi khởi hành <b>{tour.tour?.departure_location}</b></p>
                     </div>
                     </div>
                     <div className="box-support">
@@ -468,17 +468,17 @@ const Detail = () => {
                     <div className="item">
                         <img src="https://travel.com.vn/images/icons/utility/thoi%20gian.png" className="icon-img" alt="icon" />
                         <label>Thời gian</label>
-                        <p>{calculateDaysBetweenDates(tour.tour.start_date, tour.tour.end_date)}</p>
+                        <p>{calculateDaysBetweenDates(tour.tour?.start_date, tour.tour?.end_date)}</p>
                     </div>
                     <div className="item">
                         <img src="https://travel.com.vn/images/icons/utility/thoi%20gian.png" className="icon-img" alt="icon" />
                         <label>Phương tiện di chuyển</label>
-                        <p>{tour.tour.transportation}</p>
+                        <p>{tour.tour?.transportation}</p>
                     </div>
                     <div className="item">
                         <img src="https://travel.com.vn/images/icons/utility/diem%20tham%20quan.png" className="icon-img" alt="icon" />
                         <label>Điểm tham quan</label>
-                        <p>{tour.destination.destination_name}</p>
+                        <p>{tour.destination?.destination_name}</p>
                     </div>
                     <div className="item">
                         <img src="https://travel.com.vn/images/icons/utility/am%20thuc.png" className="icon-img" alt="icon" />
@@ -525,7 +525,7 @@ const Detail = () => {
             <div className="container">
                 <div className="info row">
                 <p style={{ textAlign: 'justify' }}>
-                    {tour.tour.description}
+                    {tour.tour?.description}
                 </p>
                 </div>
             </div>

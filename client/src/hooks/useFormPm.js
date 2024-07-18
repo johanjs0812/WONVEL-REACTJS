@@ -10,7 +10,7 @@ const useForm = (initialFormState) => {
   };
 
   const handleSubmit = (callback) => {
-    // console.log('da click')
+    
     return (event) => {
       // event.preventDefault();
       let isValid = true;
