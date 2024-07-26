@@ -6,8 +6,11 @@ const ChildFormPmComponent = ({forms, handleChange }) => {
     return (
         <>
             <div className="group-fields-input-contact-adult group-fields-input-contact-wrapper mb-3">
-                <div className="title-persona" style={{display: forms.length === 0 ? "none" : "block"}}>
-                    <img src="https://travel.com.vn/images/icons/persons/child.svg" alt="Người lớn" />Em bé
+                <div  style={{display: forms.length === 0 ? "none" : "block"}}>
+                    {/* <img src="https://travel.com.vn/images/icons/persons/child.svg" alt="Người lớn" />Em bé */}
+                    <div style={{fontWeight: "bold", color:"orange"}}>
+                       (Trẻ em)
+                    </div>
                 </div>
 
                 {forms.map((form, index) => (

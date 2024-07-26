@@ -6,8 +6,11 @@ const AdultFormPmComponent = ({forms, handleChange }) => {
     return (
         <>
             <div className="group-fields-input-contact-adult group-fields-input-contact-wrapper mb-3">
-                <div className="title-persona">
-                    <img src="https://travel.com.vn/images/icons/persons/adult.svg" alt="Người lớn" />Người lớn
+                <div>
+                    {/* <img src="https://travel.com.vn/images/icons/persons/adult.svg" alt="Người lớn" />Người lớn */}
+                    <div style={{fontWeight: "bold", color:"orange"}}>
+                       (Người lớn)
+                    </div>
                 </div>
 
                 {forms.map((form, index) => (

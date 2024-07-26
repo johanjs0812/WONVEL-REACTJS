@@ -423,24 +423,24 @@ const Footer = () => {
           <div className="cocobay-p" style={{ marginRight: '20px' }}>
             <h4>Ứng dụng di động</h4>
             <div className="coco-app">
-              <Link href={"bbx.cm"}>
-                <img src="https://travel.com.vn/images/apps/ggp.webp" alt="" />
+              <Link href={"bbx.cm"} style={{paddingRight: "10px"}}>
+                <img style={{width: '100%', height: "100%"}} src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fandroid.1dfd2bf5.png&w=1920&q=75" alt="" />
               </Link>
               <Link href={"bbx.cm"}>
-                <img src="https://travel.com.vn/images/apps/aps.webp" alt="" />
+                <img style={{width: '100%', height: "100%"}} src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fios.fca19e7c.png&w=1920&q=75" alt="" />
               </Link>
             </div>
             <div className="mb-bb">
               <div className="andr-pp">
                 <p>Android</p>
                 <Link href={"bbx.cm"}>
-                  <img src="https://travel.com.vn/images/apps/qrcode_android.webp" alt="" />
+                  <img style={{width: '100%', height: "100%"}} src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FgooglePlay.18297d0d.png&w=1920&q=75" alt="" />
                 </Link>
               </div>
               <div className="ios">
                 <p>iOS</p>
                 <Link href={"bbx.cm"}>
-                  <img src="https://travel.com.vn/images/apps/qrcode_ios.webp" alt="" />
+                  <img style={{width: '100%', height: "100%"}} src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FappStore.1a57a52a.png&w=1920&q=75" alt="" />
                 </Link>
               </div>
             </div>
@@ -451,24 +451,24 @@ const Footer = () => {
               <div className="securi">
                 <h4>Chứng nhận</h4>
                 <Link
-                  href="//www.dmca.com/Protection/Status.aspx?ID=9e50a0bf-95f9-4d51-9a58-0c1e0eddc3c7"
+                  href="#"
                   rel="nofollow noreferrer"
                   target="_blank"
                 >
                   <img
-                    src="https://travel.com.vn/images/apps/certification.webp"
+                    src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FDMCA.9cae11ea.png&w=1920&q=75"
                     alt=""
                     width="178"
                     height="37"
                     loading="lazy" />
                 </Link>
                 <Link
-                  href="http://online.gov.vn/Home/WebDetails/646?AspxAutoDetectCookieSupport=1"
+                  href="#"
                   rel="nofollow noreferrer"
                   target="_blank"
                 >
                   <img
-                    src="https://travel.com.vn/images/apps/notification.webp"
+                    src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FboCongThuong.7694ea55.png&w=1920&q=75"
                     alt=""
                     width="177"
                     height="68"
@@ -478,14 +478,14 @@ const Footer = () => {
               </div>
               <div className="payment">
                 <h4>Chấp nhận thanh toán</h4>
-                <img src="https://travel.com.vn/images/apps/123pay.webp" width="71" height="27" loading="lazy" alt="123pay" />
-                <img src="https://travel.com.vn/images/apps/vnpay_qrcode.webp" width="71" height="27" loading="lazy" alt="vnpay" />
-                <img src="https://travel.com.vn/images/apps/visa.webp" width="71" height="27" loading="lazy" alt="visa" />
-                <img src="https://travel.com.vn/images/apps/mtc.webp" width="71" height="27" loading="lazy" alt="mastercard" />
-                <img src="https://travel.com.vn/images/apps/jcb.webp" width="71" height="27" loading="lazy" alt="jcb" />
-                <img src="https://travel.com.vn/images/apps/vrvs.webp" width="71" height="27" loading="lazy" alt="visa" />
-                <img src="https://travel.com.vn/images/apps/shopeepay.webp" width="71" height="27" loading="lazy" alt="ShopeePay" />
-                <img src="https://travel.com.vn/images/apps/msb.png" width="71" height="27" loading="lazy" alt="MSB" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F123pay.7c4be670.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="123pay" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fvnpay.2a25e56f.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="vnpay" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fvisa.299c65a0.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="visa" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FMSB.9ce49fcc.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="mastercard" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmomo.11f49354.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="jcb" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FverifiedByVisa.a320b2a4.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="visa" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmastercard.7b4e0444.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="ShopeePay" />
+                <img src="https://travel.com.vn/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FJCB.41ec6f14.png&w=1920&q=75" width="71" height="27" loading="lazy" alt="MSB" />
               </div>
             </div>
           </div>
